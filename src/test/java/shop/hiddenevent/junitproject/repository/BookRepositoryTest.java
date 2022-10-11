@@ -3,6 +3,8 @@ package shop.hiddenevent.junitproject.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import shop.hiddenevent.junitproject.common.util.IdGenerator;
+import shop.hiddenevent.junitproject.domain.Book;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +16,22 @@ class BookRepositoryTest {
 
     // 1. 책 등록
     @Test
-    public void 책등록_test(){
-        System.out.println("책등록_test 실행");
+    void 책등록_test() {
+        // given (데이터 준비)
+        String title = "junit5";
+        String author = "RichardKim";
+        Book book = Book.AllArgsSaveBuilder()
+                .id(IdGenerator.generate())
+                .title(title)
+                .author(author)
+                .build();
+        System.out.println(book.getId());
+
+        // when (테스트 실행)
+        Book bookPS = bookRepository.save(book);
+        // then (테스트 검증)
+        assertEquals(title, bookPS.getTitle());
+        assertEquals(author, bookPS.getAuthor());
     }
 
     // 2. 책 목록보기
