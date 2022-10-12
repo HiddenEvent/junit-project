@@ -9,6 +9,7 @@ import shop.hiddenevent.junitproject.common.util.IdGenerator;
 import shop.hiddenevent.junitproject.domain.Book;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -88,6 +89,19 @@ class BookRepositoryTest {
     }
 
     // 4. 책 수정
+    @Test
+    void 책삭제_test() {
+        //given
+        String id = _id;
+
+        // when
+        bookRepository.deleteById(id);
+
+        // then
+        Optional<Book> bookOptional = bookRepository.findById(_id);
+        assertFalse(bookOptional.isPresent());
+
+    }
 
     // 5. 책 삭제
 
