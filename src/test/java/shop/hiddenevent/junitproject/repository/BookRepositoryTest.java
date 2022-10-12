@@ -1,5 +1,7 @@
 package shop.hiddenevent.junitproject.repository;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -16,6 +18,25 @@ class BookRepositoryTest {
     @Autowired // DI
     private BookRepository bookRepository;
 
+    private final String _title = "junit";
+    private final String _author = "리차드킴";
+    private final String _id = IdGenerator.generate();
+
+    //    @BeforeAll // 테스트 시작전에 한번만 실행
+    @BeforeEach  /* 각 테스트 시작전에 한번씩 실행 */
+    void 공통_given() {
+
+        // 가정 1: {데이터준비() + 1 책등록}, {데이터준비() + 2 책목록보기}
+        // 가정 2: {데이터준비() + 1 책등록 + 데이터준비() + 2 책목록보기}
+
+        Book book = Book.AllArgsSaveBuilder()
+                .id(_id)
+                .title(_title)
+                .author(_author)
+                .build();
+        bookRepository.save(book);
+    }
+
     // 1. 책 등록
     @Test
     void 책등록_test() {
@@ -27,10 +48,10 @@ class BookRepositoryTest {
                 .title(title)
                 .author(author)
                 .build();
-        System.out.println(book.getId());
 
         // when (테스트 실행)
         Book bookPS = bookRepository.save(book);
+
         // then (테스트 검증)
         assertEquals(title, bookPS.getTitle());
         assertEquals(author, bookPS.getAuthor());
@@ -40,21 +61,15 @@ class BookRepositoryTest {
     @Test
     void 책목록보기_test() {
         // given (데이터 준비)
-        String title = "junit5";
-        String author = "RichardKim";
-        Book book = Book.AllArgsSaveBuilder()
-                .id(IdGenerator.generate())
-                .title(title)
-                .author(author)
-                .build();
-        bookRepository.save(book);
+;
 
         // when (테스트 실행)
         List<Book> booksPS = bookRepository.findAll();
+        System.out.println("사이즈 ? : "+booksPS.size());
 
         // then (테스트 검증)
-        assertEquals(title, booksPS.get(0).getTitle());
-        assertEquals(author, booksPS.get(0).getAuthor());
+        assertEquals(_title, booksPS.get(0).getTitle());
+        assertEquals(_author, booksPS.get(0).getAuthor());
 
     }
 
@@ -62,22 +77,13 @@ class BookRepositoryTest {
     @Test
     void 책한건보기_test() {
         //given
-        String title = "junit5";
-        String author = "RichardKim";
-        String id = IdGenerator.generate();
-        Book book = Book.AllArgsSaveBuilder()
-                .id(id)
-                .title(title)
-                .author(author)
-                .build();
-        bookRepository.save(book);
 
         // when
-        Book bookPS = bookRepository.findById(id).get();
+        Book bookPS = bookRepository.findById(_id).get();
 
         // then
-        assertEquals(title, bookPS.getTitle());
-        assertEquals(author, bookPS.getAuthor());
+        assertEquals(_title, bookPS.getTitle());
+        assertEquals(_author, bookPS.getAuthor());
 
     }
 
