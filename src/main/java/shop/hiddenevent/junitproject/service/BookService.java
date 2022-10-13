@@ -9,6 +9,9 @@ import shop.hiddenevent.junitproject.dto.BookRequestDto;
 import shop.hiddenevent.junitproject.dto.BookResponseDto;
 import shop.hiddenevent.junitproject.repository.BookRepository;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class BookService {
@@ -28,6 +31,12 @@ public class BookService {
     }
 
     // 2. 책목록보기
+    public List<BookResponseDto.SearchList> searchBookList() {
+        return bookRepository.findAll()
+                .stream()
+                .map(new BookResponseDto.SearchList()::toDto)
+                .collect(Collectors.toList());
+    }
     // 3. 책한건보기
     // 4. 책삭제
     // 5. 책수정

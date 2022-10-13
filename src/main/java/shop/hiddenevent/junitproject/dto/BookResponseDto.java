@@ -14,7 +14,22 @@ public class BookResponseDto {
         private String title;
         private String author;
 
-        public Save toDto(Book bookPS){
+        public Save toDto(Book bookPS) {
+            this.id = bookPS.getId();
+            this.title = bookPS.getTitle();
+            this.author = bookPS.getAuthor();
+            return this;
+        }
+    }
+
+    @NoArgsConstructor
+    @Getter
+    public static class SearchList {
+        private String id;
+        private String title;
+        private String author;
+
+        public SearchList toDto(Book bookPS) {
             this.id = bookPS.getId();
             this.title = bookPS.getTitle();
             this.author = bookPS.getAuthor();
