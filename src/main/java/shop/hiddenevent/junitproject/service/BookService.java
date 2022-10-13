@@ -10,6 +10,7 @@ import shop.hiddenevent.junitproject.dto.BookResponseDto;
 import shop.hiddenevent.junitproject.repository.BookRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -20,14 +21,14 @@ public class BookService {
 
     // 1. 책등록
     @Transactional(rollbackFor = RuntimeException.class)
-    public BookResponseDto.Save bookSave(BookRequestDto.Save dto) {
+    public BookResponseDto.Create createBook(BookRequestDto.Create dto) {
         Book book = Book.AllArgsSaveBuilder()
                 .id(IdGenerator.generate())
                 .title(dto.getTitle())
                 .author(dto.getAuthor())
                 .build();
         Book bookPS = bookRepository.save(book);
-        return new BookResponseDto.Save().toDto(bookPS);
+        return new BookResponseDto.Create().toDto(bookPS);
     }
 
     // 2. 책목록보기
@@ -37,7 +38,21 @@ public class BookService {
                 .map(new BookResponseDto.SearchList()::toDto)
                 .collect(Collectors.toList());
     }
+
     // 3. 책한건보기
+    public BookResponseDto.Detail searchBook(String id) {
+        Optional<Book> bookOP = bookRepository.findById(id);
+        if (bookOP.isPresent()) {
+            return new BookResponseDto.Detail().toDto(bookOP.get());
+        } else {
+            throw new RuntimeException("해당 아이디를 찾을 수 없습니다.");
+        }
+
+    }
     // 4. 책삭제
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void deleteBook(String id){
+        bookRepository.deleteById(id);
+    }
     // 5. 책수정
 }

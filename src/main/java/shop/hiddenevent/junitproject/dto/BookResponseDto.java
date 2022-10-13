@@ -9,12 +9,12 @@ import shop.hiddenevent.junitproject.domain.Book;
 public class BookResponseDto {
     @NoArgsConstructor
     @Getter
-    public static class Save {
+    public static class Create {
         private String id;
         private String title;
         private String author;
 
-        public Save toDto(Book bookPS) {
+        public Create toDto(Book bookPS) {
             this.id = bookPS.getId();
             this.title = bookPS.getTitle();
             this.author = bookPS.getAuthor();
@@ -36,4 +36,19 @@ public class BookResponseDto {
             return this;
         }
     }
+    @NoArgsConstructor
+    @Getter
+    public static class Detail {
+        private String id;
+        private String title;
+        private String author;
+
+        public Detail toDto(Book bookPS) {
+            this.id = bookPS.getId();
+            this.title = bookPS.getTitle();
+            this.author = bookPS.getAuthor();
+            return this;
+        }
+    }
+
 }

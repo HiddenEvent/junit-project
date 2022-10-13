@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
 public class BookRequestDto {
 
     @Getter
-    public static class Save {
+    public static class Create {
         private String title;
         private String author;
     }
