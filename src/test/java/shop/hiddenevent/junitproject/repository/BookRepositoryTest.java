@@ -62,11 +62,11 @@ class BookRepositoryTest {
     @Test
     void 책목록보기_test() {
         // given (데이터 준비)
-;
+        ;
 
         // when (테스트 실행)
         List<Book> booksPS = bookRepository.findAll();
-        System.out.println("사이즈 ? : "+booksPS.size());
+        System.out.println("사이즈 ? : " + booksPS.size());
 
         // then (테스트 검증)
         assertEquals(_title, booksPS.get(0).getTitle());
@@ -78,9 +78,10 @@ class BookRepositoryTest {
     @Test
     void 책한건보기_test() {
         //given
+        String id = _id;
 
         // when
-        Book bookPS = bookRepository.findById(_id).get();
+        Book bookPS = bookRepository.findById(id).get();
 
         // then
         assertEquals(_title, bookPS.getTitle());
@@ -88,9 +89,10 @@ class BookRepositoryTest {
 
     }
 
-    // 4. 책 수정
+    // 4. 책 삭제
     @Test
     void 책삭제_test() {
+
         //given
         String id = _id;
 
@@ -103,7 +105,36 @@ class BookRepositoryTest {
 
     }
 
-    // 5. 책 삭제
+    // 5. 책 수정
+    @Test
+    void 책수정_test() {
+
+        //given
+        String id = _id;
+        String title = "junit5";
+        String author = "RichardKim";
+
+        // when
+//        bookRepository.findAll().forEach(book -> {
+//                    System.out.println(book.getId());
+//                    System.out.println(book.getTitle());
+//                    System.out.println(book.getAuthor());
+//                });
+        Book bookPS = bookRepository.findById(id).get();
+        bookPS.modifyBook(title, author);
+        bookRepository.save(bookPS);
+
+//        bookRepository.findAll().forEach(book -> {
+//                    System.out.println(book.getId());
+//                    System.out.println(book.getTitle());
+//                    System.out.println(book.getAuthor());
+//                });
 
 
+        // then
+        assertEquals(id, bookPS.getId());
+        assertEquals(title, bookPS.getTitle());
+        assertEquals(author, bookPS.getAuthor());
+
+    }
 }

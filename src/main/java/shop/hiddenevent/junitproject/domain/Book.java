@@ -30,4 +30,9 @@ public class Book {
         this.title = title;
         this.author = author;
     }
+
+    public void modifyBook(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
 }
