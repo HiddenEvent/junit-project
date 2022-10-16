@@ -12,4 +12,10 @@ public class BookRequestDto {
         private String author;
     }
 
+    @Getter
+    public static class Modify {
+        private String title;
+        private String author;
+    }
+
 }
