@@ -1,4 +1,4 @@
-package shop.hiddenevent.junitproject.common.util;
+package shop.hiddenevent.junitproject.util.idgenerator;
 
 import org.springframework.util.AlternativeJdkIdGenerator;
 

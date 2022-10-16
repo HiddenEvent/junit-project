@@ -1,11 +1,10 @@
 package shop.hiddenevent.junitproject.repository;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import shop.hiddenevent.junitproject.common.util.IdGenerator;
+import shop.hiddenevent.junitproject.util.idgenerator.IdGenerator;
 import shop.hiddenevent.junitproject.domain.Book;
 
 import java.util.List;

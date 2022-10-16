@@ -3,11 +3,12 @@ package shop.hiddenevent.junitproject.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.hiddenevent.junitproject.common.util.IdGenerator;
+import shop.hiddenevent.junitproject.util.idgenerator.IdGenerator;
 import shop.hiddenevent.junitproject.domain.Book;
 import shop.hiddenevent.junitproject.dto.BookRequestDto;
 import shop.hiddenevent.junitproject.dto.BookResponseDto;
 import shop.hiddenevent.junitproject.repository.BookRepository;
+import shop.hiddenevent.junitproject.util.mail.MailSender;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final MailSender mailSender;
 
     // 1. 책등록
     @Transactional(rollbackFor = RuntimeException.class)
@@ -28,6 +30,9 @@ public class BookService {
                 .author(dto.getAuthor())
                 .build();
         Book bookPS = bookRepository.save(book);
+        if (!mailSender.send()){
+            throw new RuntimeException("메일이 전송되지 않았습니다.");
+        }
         return new BookResponseDto.Create().toDto(bookPS);
     }
 

@@ -1,4 +1,4 @@
-package shop.hiddenevent.junitproject.common.util;
+package shop.hiddenevent.junitproject.util.idgenerator;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;

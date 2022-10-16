@@ -1,4 +1,4 @@
-package shop.hiddenevent.junitproject.common.util;
+package shop.hiddenevent.junitproject.util.idgenerator;
 
 import java.sql.Timestamp;
 import java.time.Instant;
