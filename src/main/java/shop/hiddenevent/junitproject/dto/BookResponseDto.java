@@ -14,27 +14,28 @@ public class BookResponseDto {
         private String title;
         private String author;
 
-        public Create toDto(Book bookPS) {
-            this.id = bookPS.getId();
-            this.title = bookPS.getTitle();
-            this.author = bookPS.getAuthor();
-            return this;
+        public static Create toDto(Book bookPS) {
+            Create dto = new Create();
+            dto.id = bookPS.getId();
+            dto.title = bookPS.getTitle();
+            dto.author = bookPS.getAuthor();
+            return dto;
         }
     }
 
     @NoArgsConstructor
     @Getter
-    public static class SearchList {
+    public static class SearchAll {
         private String id;
         private String title;
         private String author;
 
-        public static SearchList toDto(Book bookPS) {
-            SearchList searchList = new SearchList();
-            searchList.id = bookPS.getId();
-            searchList.title = bookPS.getTitle();
-            searchList.author = bookPS.getAuthor();
-            return searchList;
+        public static SearchAll toDto(Book bookPS) {
+            SearchAll dto = new SearchAll();
+            dto.id = bookPS.getId();
+            dto.title = bookPS.getTitle();
+            dto.author = bookPS.getAuthor();
+            return dto;
         }
     }
     @NoArgsConstructor
@@ -44,11 +45,12 @@ public class BookResponseDto {
         private String title;
         private String author;
 
-        public Detail toDto(Book bookPS) {
-            this.id = bookPS.getId();
-            this.title = bookPS.getTitle();
-            this.author = bookPS.getAuthor();
-            return this;
+        public static Detail toDto(Book bookPS) {
+            Detail dto = new Detail();
+            dto.id = bookPS.getId();
+            dto.title = bookPS.getTitle();
+            dto.author = bookPS.getAuthor();
+            return dto;
         }
     }
 

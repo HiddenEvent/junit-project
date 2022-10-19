@@ -1,26 +1,21 @@
 package shop.hiddenevent.junitproject.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import shop.hiddenevent.junitproject.domain.Book;
 import shop.hiddenevent.junitproject.dto.BookRequestDto;
 import shop.hiddenevent.junitproject.dto.BookResponseDto;
 import shop.hiddenevent.junitproject.repository.BookRepository;
 import shop.hiddenevent.junitproject.util.idgenerator.IdGenerator;
 import shop.hiddenevent.junitproject.util.mail.MailSender;
-import shop.hiddenevent.junitproject.util.mail.MailSenderStub;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.*;
@@ -70,8 +65,6 @@ class BookServiceTest {
     @Test
     void 책목록보기_테스트() {
         // given
-
-        // stub (가정 = 가설)
         ArrayList<Book> books = new ArrayList<>();
         String id1 = IdGenerator.generate();
         String id2 = IdGenerator.generate();
@@ -90,19 +83,38 @@ class BookServiceTest {
                         .build()
         );
 
+        // stub (가정 = 가설)
         when(bookRepository.findAll()).thenReturn(books);
 
         // when(실행)
-        List<BookResponseDto.SearchList> searchListResponse = bookService.searchBookList();
+        List<BookResponseDto.SearchAll> searchListResponse = bookService.searchAllBook();
 
         // then(검증)
-        assertThat(searchListResponse.get(0).getTitle())
-                .isEqualTo("junit강의");
-        assertThat(searchListResponse.get(0).getAuthor())
-                .isEqualTo("메타코딩");
-        assertThat(searchListResponse.get(1).getTitle())
-                .isEqualTo("spring강의");
-        assertThat(searchListResponse.get(1).getAuthor())
-                .isEqualTo("리처드");
+        assertThat(searchListResponse.get(0).getTitle()).isEqualTo("junit강의");
+        assertThat(searchListResponse.get(0).getAuthor()).isEqualTo("메타코딩");
+        assertThat(searchListResponse.get(1).getTitle()).isEqualTo("spring강의");
+        assertThat(searchListResponse.get(1).getAuthor()).isEqualTo("리처드");
+    }
+
+    @Test
+    void 책한건보기_테스트() {
+        // given
+        String id = IdGenerator.generate();
+        Book book = Book.AllArgsSaveBuilder()
+                .id(id)
+                .title("junit강의")
+                .author("메타코딩")
+                .build();
+        Optional<Book> bookOP = Optional.of(book);
+
+        // stub
+        when(bookRepository.findById(id)).thenReturn(bookOP);
+
+        // when
+        BookResponseDto.Detail detailResponseDto = bookService.searchBook(id);
+
+        // then
+        assertThat(detailResponseDto.getTitle()).isEqualTo("junit강의");
+        assertThat(detailResponseDto.getAuthor()).isEqualTo("메타코딩");
     }
 }
