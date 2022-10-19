@@ -65,6 +65,9 @@ class BookServiceTest {
     @Test
     void 책목록보기_테스트() {
         // given
+        /*request 데이터가 없음*/
+
+        // stub (가정 = 가설)
         ArrayList<Book> books = new ArrayList<>();
         String id1 = IdGenerator.generate();
         String id2 = IdGenerator.generate();
@@ -82,8 +85,6 @@ class BookServiceTest {
                         .author("리처드")
                         .build()
         );
-
-        // stub (가정 = 가설)
         when(bookRepository.findAll()).thenReturn(books);
 
         // when(실행)
@@ -100,14 +101,14 @@ class BookServiceTest {
     void 책한건보기_테스트() {
         // given
         String id = IdGenerator.generate();
+
+        // stub
         Book book = Book.AllArgsSaveBuilder()
                 .id(id)
                 .title("junit강의")
                 .author("메타코딩")
                 .build();
         Optional<Book> bookOP = Optional.of(book);
-
-        // stub
         when(bookRepository.findById(id)).thenReturn(bookOP);
 
         // when
@@ -116,5 +117,33 @@ class BookServiceTest {
         // then
         assertThat(detailResponseDto.getTitle()).isEqualTo("junit강의");
         assertThat(detailResponseDto.getAuthor()).isEqualTo("메타코딩");
+    }
+
+    @Test
+    void 책수정하기_테스트() {
+        // given
+        String id = IdGenerator.generate();
+        BookRequestDto.Modify modifyRequestDto = BookRequestDto.Modify.builder()
+                .title("수정타이틀")
+                .author("홍기리")
+                .build();
+
+        // stub
+        Book book = Book.AllArgsSaveBuilder()
+                .id(id)
+                .title("junit강의")
+                .author("메타코딩")
+                .build();
+        Optional<Book> bookOP = Optional.of(book);
+        when(bookRepository.findById(id)).thenReturn(bookOP);
+
+        // when
+        BookResponseDto.Modify modifyResponseDto = bookService.modifyBook(id, modifyRequestDto);
+
+        // then
+        assertThat(modifyResponseDto.getTitle()).isEqualTo(modifyRequestDto.getTitle());
+        assertThat(modifyResponseDto.getAuthor()).isEqualTo(modifyRequestDto.getAuthor());
+
+
     }
 }

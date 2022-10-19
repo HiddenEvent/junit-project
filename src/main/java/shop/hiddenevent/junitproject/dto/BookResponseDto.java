@@ -38,6 +38,7 @@ public class BookResponseDto {
             return dto;
         }
     }
+
     @NoArgsConstructor
     @Getter
     public static class Detail {
@@ -54,4 +55,19 @@ public class BookResponseDto {
         }
     }
 
+    @NoArgsConstructor
+    @Getter
+    public static class Modify {
+        private String id;
+        private String title;
+        private String author;
+
+        public static Modify toDto(Book bookPS) {
+            Modify dto = new Modify();
+            dto.id = bookPS.getId();
+            dto.title = bookPS.getTitle();
+            dto.author = bookPS.getAuthor();
+            return dto;
+        }
+    }
 }
