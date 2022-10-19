@@ -23,11 +23,11 @@ public class BookService {
 
     // 1. 책등록
     @Transactional(rollbackFor = RuntimeException.class)
-    public BookResponseDto.Create createBook(BookRequestDto.Create dto) {
+    public BookResponseDto.Create createBook(BookRequestDto.Create requestDto) {
         Book book = Book.AllArgsSaveBuilder()
                 .id(IdGenerator.generate())
-                .title(dto.getTitle())
-                .author(dto.getAuthor())
+                .title(requestDto.getTitle())
+                .author(requestDto.getAuthor())
                 .build();
         Book bookPS = bookRepository.save(book);
         if (!mailSender.send()){
@@ -62,11 +62,11 @@ public class BookService {
 
     // 5. 책수정
     @Transactional(rollbackFor = RuntimeException.class)
-    public BookResponseDto.Modify modifyBook(String id, BookRequestDto.Modify dto){
+    public BookResponseDto.Modify modifyBook(String id, BookRequestDto.Modify requestDto){
         Optional<Book> bookOP = bookRepository.findById(id);
         if (bookOP.isPresent()) {
             Book bookPS = bookOP.get();
-            bookPS.modifyBook(dto.getTitle(), dto.getAuthor());
+            bookPS.modifyBook(requestDto.getTitle(), requestDto.getAuthor());
             return BookResponseDto.Modify.toDto(bookPS);
         } else {
             throw new RuntimeException("해당 아이디를 찾을 수 없습니다.");
