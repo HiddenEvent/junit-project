@@ -16,6 +16,10 @@ import shop.hiddenevent.junitproject.util.idgenerator.IdGenerator;
 import shop.hiddenevent.junitproject.util.mail.MailSender;
 import shop.hiddenevent.junitproject.util.mail.MailSenderStub;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -59,8 +63,46 @@ class BookServiceTest {
 //        assertEquals(dto.getAuthor(), responseDto.getAuthor());
 
         // https://assertj.github.io/doc/ 의존 추가 후 변경
-        assertThat(dto.getTitle()).isEqualTo(responseDto.getTitle());
-        assertThat(dto.getAuthor()).isEqualTo(responseDto.getAuthor());
+        assertThat(responseDto.getTitle()).isEqualTo(dto.getTitle());
+        assertThat(responseDto.getAuthor()).isEqualTo(dto.getAuthor());
     }
 
+    @Test
+    void 책목록보기_테스트() {
+        // given
+
+        // stub (가정 = 가설)
+        ArrayList<Book> books = new ArrayList<>();
+        String id1 = IdGenerator.generate();
+        String id2 = IdGenerator.generate();
+        books.add(
+                Book.AllArgsSaveBuilder()
+                        .id(id1)
+                        .title("junit강의")
+                        .author("메타코딩")
+                        .build()
+        );
+        books.add(
+                Book.AllArgsSaveBuilder()
+                        .id(id2)
+                        .title("spring강의")
+                        .author("리처드")
+                        .build()
+        );
+
+        when(bookRepository.findAll()).thenReturn(books);
+
+        // when(실행)
+        List<BookResponseDto.SearchList> searchListResponse = bookService.searchBookList();
+
+        // then(검증)
+        assertThat(searchListResponse.get(0).getTitle())
+                .isEqualTo("junit강의");
+        assertThat(searchListResponse.get(0).getAuthor())
+                .isEqualTo("메타코딩");
+        assertThat(searchListResponse.get(1).getTitle())
+                .isEqualTo("spring강의");
+        assertThat(searchListResponse.get(1).getAuthor())
+                .isEqualTo("리처드");
+    }
 }
