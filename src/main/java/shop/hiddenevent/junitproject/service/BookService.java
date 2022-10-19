@@ -40,7 +40,7 @@ public class BookService {
     public List<BookResponseDto.SearchList> searchBookList() {
         return bookRepository.findAll()
                 .stream()
-                .map(book -> new BookResponseDto.SearchList().toDto(book))
+                .map(BookResponseDto.SearchList::toDto)
                 .collect(Collectors.toList());
     }
 
