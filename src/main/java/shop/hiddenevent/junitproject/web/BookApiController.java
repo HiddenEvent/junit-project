@@ -2,7 +2,6 @@ package shop.hiddenevent.junitproject.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import shop.hiddenevent.junitproject.dto.BookRequestDto;
 import shop.hiddenevent.junitproject.dto.BookResponseDto;
+import shop.hiddenevent.junitproject.dto.CommonResponseDto;
 import shop.hiddenevent.junitproject.service.BookService;
 
 import javax.validation.Valid;
@@ -30,19 +30,19 @@ public class BookApiController {
     // 1. 책등록
     @PostMapping("/v1/book")
     public ResponseEntity<?> createBook(@RequestBody @Valid BookRequestDto.Create requestDto, BindingResult bindingResult ) {
-        log.info("=========================> "+bindingResult.hasErrors());
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
             }
-            log.error("에러가 났네요 ;;;;;;;;;;; "+errorMap.toString());
-
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMap.toString());
+            throw new RuntimeException(errorMap.toString());
         }
         BookResponseDto.Create responseDto = bookService.createBook(requestDto);
-
-        return ResponseEntity.ok().body(responseDto);
+        return ResponseEntity.ok().body(CommonResponseDto.builder()
+                    .code(1)
+                    .msg("글 저장 성공")
+                    .body(responseDto)
+                    .build());
     }
     // 2. 책목록보기
     public ResponseEntity<List<BookResponseDto.SearchAll>> searchAllBook() {

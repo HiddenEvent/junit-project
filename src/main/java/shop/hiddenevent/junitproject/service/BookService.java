@@ -3,6 +3,7 @@ package shop.hiddenevent.junitproject.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.hiddenevent.junitproject.dto.CommonResponseDto;
 import shop.hiddenevent.junitproject.util.idgenerator.IdGenerator;
 import shop.hiddenevent.junitproject.domain.Book;
 import shop.hiddenevent.junitproject.dto.BookRequestDto;
