@@ -26,7 +26,7 @@ public class BookApiController {
 
     // 1. 책등록
     @PostMapping("/v1/book")
-    public ResponseEntity<BookResponseDto.Create> createBook(@RequestBody @Valid BookRequestDto.Create requestDto, BindingResult bindingResult ) {
+    public ResponseEntity<BookResponseDto.Create> createBook(@RequestBody @Valid BookRequestDto.Create requestDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             Map<String, String> errorMap = new HashMap<>();
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -37,6 +37,7 @@ public class BookApiController {
         BookResponseDto.Create responseDto = bookService.createBook(requestDto);
         return ResponseEntity.ok().body(responseDto);
     }
+
     // 2. 책목록보기
     @GetMapping("/v1/book")
     public ResponseEntity<List<BookResponseDto.SearchAll>> searchAllBook() {
@@ -44,16 +45,24 @@ public class BookApiController {
 
         return ResponseEntity.ok().body(responseDtos);
     }
+
     // 3. 책한건보기
-    public ResponseEntity<BookResponseDto.Detail> searchBook(String id) {
-        return null;
+    @GetMapping("/v1/book/{id}")
+    public ResponseEntity<BookResponseDto.Detail> searchBook(@PathVariable String id) {
+        BookResponseDto.Detail detail = bookService.searchBook(id);
+        return ResponseEntity.ok().body(detail);
     }
+
     // 4. 책삭제
-    public ResponseEntity<?> deleteBook(String id){
-        return null;
+    @DeleteMapping("/v1/book/{id}")
+    public ResponseEntity<?> deleteBook(@PathVariable String id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.ok().build();
+
     }
+
     // 5. 책수정
-    public ResponseEntity<BookResponseDto.Modify> modifyBook(String id, BookRequestDto.Modify requestDto){
+    public ResponseEntity<BookResponseDto.Modify> modifyBook(String id, BookRequestDto.Modify requestDto) {
         return null;
     }
 }
