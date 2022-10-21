@@ -62,7 +62,18 @@ public class BookApiController {
     }
 
     // 5. 책수정
-    public ResponseEntity<BookResponseDto.Modify> modifyBook(String id, BookRequestDto.Modify requestDto) {
-        return null;
+    @PutMapping("/v1/book/{id}")
+    public ResponseEntity<BookResponseDto.Modify> modifyBook(@PathVariable String id,
+                                                             @RequestBody @Valid BookRequestDto.Modify requestDto,
+                                                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            throw new RuntimeException(errorMap.toString());
+        }
+        BookResponseDto.Modify response = bookService.modifyBook(id, requestDto);
+        return ResponseEntity.ok().body(response);
     }
 }
