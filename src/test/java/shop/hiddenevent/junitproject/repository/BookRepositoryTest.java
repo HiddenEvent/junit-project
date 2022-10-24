@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import shop.hiddenevent.junitproject.util.idgenerator.IdGenerator;
 import shop.hiddenevent.junitproject.domain.Book;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("dev")
 @DataJpaTest // DB와 관련된 컴포넌트만 메모리에 로딩
 class BookRepositoryTest {
 

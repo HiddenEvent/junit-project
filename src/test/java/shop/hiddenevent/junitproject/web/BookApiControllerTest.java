@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
+import org.springframework.test.context.ActiveProfiles;
 import shop.hiddenevent.junitproject.domain.Book;
 import shop.hiddenevent.junitproject.dto.BookRequestDto;
 import shop.hiddenevent.junitproject.repository.BookRepository;
@@ -20,6 +21,7 @@ import shop.hiddenevent.junitproject.util.idgenerator.IdGenerator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // 통합테스트
+@ActiveProfiles("dev")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class BookApiControllerTest {
     @Autowired // DI
@@ -64,8 +66,6 @@ class BookApiControllerTest {
         requestDto.setTitle("타이틀");
         requestDto.setAuthor("저작자");
         String body = om.writeValueAsString(requestDto);
-
-        System.out.println(body);
 
         // when
         HttpEntity<String> request = new HttpEntity<>(body, headers);
@@ -129,6 +129,23 @@ class BookApiControllerTest {
     }
 
     @Test
-    void modifyBook() {
+    void modifyBook() throws JsonProcessingException {
+        // given
+        String id = _id;
+        BookRequestDto.Modify requestDto = new BookRequestDto.Modify();
+        requestDto.setTitle("수정-타이틀");
+        requestDto.setAuthor("수정-작성자");
+        String body = om.writeValueAsString(requestDto);
+
+        // when
+        HttpEntity<String> request = new HttpEntity<>(body, headers);
+        ResponseEntity<String> response = rt.exchange("/api/v1/book/"+id, HttpMethod.PUT, request, String.class);
+
+        // then
+        DocumentContext dc = JsonPath.parse(response.getBody()); // String 데이터를 Json형식으로 파싱
+        String title = dc.read("$.title");
+        String author = dc.read("$.author");
+        assertThat(title).isEqualTo("수정-타이틀");
+        assertThat(author).isEqualTo("수정-작성자");
     }
 }

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 import shop.hiddenevent.junitproject.domain.Book;
 import shop.hiddenevent.junitproject.dto.BookRequestDto;
 import shop.hiddenevent.junitproject.dto.BookResponseDto;
@@ -20,7 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.assertj.core.api.Assertions.*;
 
-
+@ActiveProfiles("dev")
 @ExtendWith(MockitoExtension.class) /*가짜 메모리 환경*/
 class BookServiceTest {
     @InjectMocks /*@Mock으로 선언된 가짜 환경을 주입해준다.*/
