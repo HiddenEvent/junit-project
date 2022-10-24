@@ -104,7 +104,7 @@ class BookApiControllerTest {
 
         // when
         HttpEntity<String> request = new HttpEntity<>(null, headers);
-        ResponseEntity<String> response = rt.exchange("/api/v1/book/"+_id, HttpMethod.GET, request, String.class);
+        ResponseEntity<String> response = rt.exchange("/api/v1/book/"+id, HttpMethod.GET, request, String.class);
 
         // then
         DocumentContext dc = JsonPath.parse(response.getBody()); // String 데이터를 Json형식으로 파싱
@@ -116,6 +116,16 @@ class BookApiControllerTest {
 
     @Test
     void deleteBook() {
+        // given
+        String id = _id;
+
+        // when
+        HttpEntity<String> request = new HttpEntity<>(null, headers);
+        ResponseEntity<String> response = rt.exchange("/api/v1/book/"+id, HttpMethod.DELETE, request, String.class);
+
+        // then
+        int statusCodeValue = response.getStatusCodeValue();
+        assertThat(statusCodeValue).isEqualTo(200);
     }
 
     @Test
